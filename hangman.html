@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hangman Game</h1>
+    <div id="wordToGuess"></div>
+    <p>Incorrect Guesses: <span id="incorrectGuesses"></span></p>
+    <input type="text" id="guessInput" maxlength="1">
+    <button onclick="guessLetter()">Guess</button>
+
+    <script>
+        // Define the list of words to guess
+        const words = ["javascript", "hangman", "programming", "computer", "code"];
+
+        // Select a random word from the list
+        let selectedWord = words[Math.floor(Math.random() * words.length)];
+
+        // Create an array to store the guessed letters
+        let guessedLetters = [];
+
+        // Create an array to store the incorrect guesses
+        let incorrectGuesses = [];
+
+        // Function to display the word to guess with hidden letters
+        function displayWord() {
+            let display = '';
+            for (let letter of selectedWord) {
+                if (guessedLetters.includes(letter)) {
+                    display += letter + ' ';
+                } else {
+                    display += '_ ';
+                }
+            }
+            document.getElementById('wordToGuess').textContent = display;
+        }
+
+        // Function to handle the letter guess
+        function guessLetter() {
+            let guess = document.getElementById('guessInput').value.toLowerCase();
+            if (guess && !guessedLetters.includes(guess)) {
+                guessedLetters.push(guess);
+                if (selectedWord.includes(guess)) {
+                    if (guessedLetters.length === new Set(selectedWord.split('')).size) {
+                        alert('Congratulations! You guessed the word: ' + selectedWord);
+                        resetGame();
+                    } else {
+                        displayWord();
+                    }
+                } else {
+                    incorrectGuesses.push(guess);
+                    document.getElementById('incorrectGuesses').textContent = incorrectGuesses.join(', ');
+                }
+            }
+            document.getElementById('guessInput').value = '';
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            selectedWord = words[Math.floor(Math.random() * words.length)];
+            guessedLetters = [];
+            incorrectGuesses = [];
+            displayWord();
+            document.getElementById('incorrectGuesses').textContent = '';
+        }
+
+        // Initialize the game
+        displayWord();
+    </script>
+</body>
+</html>
