@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: white;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        .color-sequence {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .color {
+            border: 10px solid rgb(12, 5, 19);
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 10px;
+            width: 20px;
+            cursor: pointer;
+        }
+        .instructions {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GUESS THE COLOR SEQUENCE</h1>
+    <div class="instructions">
+        <p>Guess the color sequence by clicking on the colored boxes below.</p>
+        <p>You have 3 attempts.</p>
+    </div>
+
+    <div class="container" id="container">
+        <div class="color" id="color1"></div>
+        <div class="color" id="color2"></div>
+        <div class="color" id="color3"></div>
+    </div>
+
+    <div class="color-sequence" id="colorSequence"></div>
+
+    <div class="instructions" id="message"></div>
+
+    <script>
+        const colorElements = document.querySelectorAll('.color');
+        const colorSequenceElement = document.getElementById('colorSequence');
+        const messageElement = document.getElementById('message');
+
+        const maxAttempts = 3;
+        let attemptsLeft = maxAttempts;
+        let colors = [];
+
+        function getRandomValue() {
+            return Math.floor(Math.random() * 256); 
+        }
+
+        function randomColor() {
+            const red = getRandomValue();
+            const green = getRandomValue();
+            const blue = getRandomValue();
+            return 'rgb(' + red + ',' + green + ',' + blue + ')'; 
+        }
+
+        function resetGame() {
+            attemptsLeft = maxAttempts;
+            messageElement.textContent = '';
+            colorSequenceElement.innerHTML = '';
+            colors = [];
+            for (let i = 0; i < 3; i++) {
+                const color = randomColor();
+                colors.push(color);
+                const colorDiv = document.createElement('div');
+                colorDiv.classList.add('color');
+                colorDiv.style.backgroundColor = 'white'; // Hidden colors initially
+                colorDiv.addEventListener('click', () => revealColor(colorDiv, i));
+                colorSequenceElement.appendChild(colorDiv);
+            }
+        }
+
+        function revealColor(colorDiv, index) {
+            colorDiv.style.backgroundColor = colors[index];
+            if (attemptsLeft > 0) {
+                const guessedColors = Array.from(colorElements).map(color => color.style.backgroundColor);
+                if (JSON.stringify(guessedColors) === JSON.stringify(colors)) {
+                    messageElement.textContent = 'Congratulations! You guessed it right!';
+                    colorElements.forEach(color => color.removeEventListener('click', () => {}));
+                } else {
+                    attemptsLeft--;
+                    if (attemptsLeft === 0) {
+                        messageElement.textContent = 'Oops! You used all your attempts. The correct sequence was: ' + colors.join(', ');
+                    } else {
+                        messageElement.textContent = 'Oops! Wrong guess. Try again! Attempts left: ' + attemptsLeft;
+                    }
+                }
+            }
+        }
+
+        resetGame();
+    </script>
