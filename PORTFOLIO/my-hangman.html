@@ -1,19 +1,33 @@
+<!-- Pick a random word
+While the word has not been guessed {
+Show the player their current progress
+Get a guess from the player
+If the player wants to quit the game {
+Quit the game
+}
+Else If the guess is not a single letter {
+Tell the player to pick a single letter
+}
+Else {
+If the guess is in the word {
+Update the player's progress with the guess
+}
+}
+} -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hangman</title>
+    <title>hangman</title>
+   
 </head>
 <body>
-    <h1>HANGAMAN GAME</h1>
-    <div id="wordToGuess"></div>
-    <p>Incorrect Guess: <span id="incorrectGuesses"></span></p>
+    <h1>HANGMAN GAME</h1>
 
-    <div>
-        <input type="text" maxlength="1">
-        <button id="textInput" onchange="guess_letter()">GUESS</button>
-    </div>
+    <script src="my-hangman.js"></script>
     
 </body>
 </html>
